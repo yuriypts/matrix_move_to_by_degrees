@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BenchmarkDotNet.Running;
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 
@@ -6,66 +7,59 @@ namespace Matrix_Move_To_By_Degrees
 {
     class Program
     {
+        public static readonly int[][] arr1 =
+        {
+            new int[] { 1, 2, 3 },
+            new int[] { 4, 5, 6 },
+            new int[] { 7, 8, 9 },
+        };
+
+        public static readonly int[][] arr =
+        {
+            new int [] { 1, 2, 3, 4, 7 },
+            new int [] { 4, 3, 2, 5, 8 },
+            new int [] { 5, 2, 1, 5, 4 },
+            new int [] { 6, 5, 3, 1, 9 },
+            new int [] { 2, 6, 1, 8, 3 },
+        };
+
+        public static readonly List<List<int>> arrWithList = new List<List<int>>
+        {
+            new List<int> { 1, 2, 3, 4, 7 },
+            new List<int> { 4, 3, 2, 5, 8 },
+            new List<int> { 5, 2, 1, 5, 4 },
+            new List<int> { 6, 5, 3, 1, 9 },
+            new List<int> { 2, 6, 1, 8, 3 },
+        };
+
         static void Main(string[] args)
         {
-            var arr = new List<List<int>>
-            {
-                new List<int> { 1, 2, 3, 4, 7 },
-                new List<int> { 4, 3, 2, 5, 8 },
-                new List<int> { 5, 2, 1, 5, 4 },
-                new List<int> { 6, 5, 3, 1, 9 },
-                new List<int> { 2, 6, 1, 8, 3 },
-            };
+            //Matrix matrix = new Matrix();
 
-            //var arr = new List<List<int>>
-            //{
-            //    new List<int> { 1, 2, 3 },
-            //    new List<int> { 4, 5, 6 },
-            //    new List<int> { 7, 8, 9 },
-            //};
+            //ShowInConsole(arr);
 
+            //Console.WriteLine("----------------------");
 
-            ShowInConsole(arr);
+            //var updatedArr = matrix.MoveByDegrees(arr);
 
-            Console.WriteLine("----------------------");
+            //ShowInConsole(updatedArr);
 
-            var updatedArr = MoveByDegrees(arr);
+            //Console.ReadKey();
 
-            ShowInConsole(updatedArr);
-
-
-            Console.ReadKey();
+            BenchmarkRunner.Run<ProgramBenchmarks>();
         }
 
-        static void ShowInConsole(List<List<int>> arr) 
+        static void ShowInConsole(int[][] arr) 
         {
-            foreach (var item in arr)
+            for (int i = 0; i < arr.Length; i++)
             {
-                foreach (var index in item)
+                for (int j = 0; j < arr[i].Length; j++)
                 {
-                    Console.Write(index + ", ");
+                    Console.Write(arr[i][j] + ", ");
                 }
 
                 Console.WriteLine("");
             }
-        }
-
-        static List<List<int>> MoveByDegrees(List<List<int>> arr)
-        {
-            List<List<int>> copiedArr = JsonSerializer.Deserialize<List<List<int>>>(JsonSerializer.Serialize(arr));
-
-            for (int i = 0; i < arr.Count; i++)
-            {
-                int indexX = arr[i].Count - 1;
-
-                for (int j = 0; j < arr[i].Count; j++) 
-                {
-                    copiedArr[i][j] = arr[indexX][i];
-                    indexX--;
-                }
-            }
-
-            return copiedArr;
         }
     }
 }
